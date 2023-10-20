@@ -62,7 +62,9 @@ const RegisterPage = () => {
   // ** States
   const [values, setValues] = useState({
     password: '',
-    showPassword: false
+    retypePassword: '',
+    showPassword: false,
+    showRetypePassword: false
   })
 
   // ** Hook
@@ -74,6 +76,10 @@ const RegisterPage = () => {
 
   const handleClickShowPassword = () => {
     setValues({ ...values, showPassword: !values.showPassword })
+  }
+
+  const handleClickShowRetypePassword = () => {
+    setValues({ ...values, showRetypePassword: !values.showRetypePassword })
   }
 
   const handleMouseDownPassword = event => {
@@ -164,12 +170,11 @@ const RegisterPage = () => {
             <Typography variant='body2'>Make your app management easy and fun!</Typography>
           </Box> */}
           <form noValidate autoComplete='off' onSubmit={e => e.preventDefault()}>
-            <TextField autoFocus fullWidth id='given-name' label='Given name' sx={{ marginBottom: 4 }} />
-            <TextField fullWidth id='last-name' label='Last name' sx={{ marginBottom: 4 }} />
-            <TextField fullWidth id='username' label='Username' sx={{ marginBottom: 4 }} />
+            <TextField autoFocus fullWidth id='given-name' label='Họ' sx={{ marginBottom: 4 }} />
+            <TextField fullWidth id='last-name' label='Tên' sx={{ marginBottom: 4 }} />
             <TextField fullWidth type='email' label='Email' sx={{ marginBottom: 4 }} />
-            <FormControl fullWidth>
-              <InputLabel htmlFor='auth-register-password'>Password</InputLabel>
+            <FormControl fullWidth sx={{ marginBottom: 4 }}>
+              <InputLabel htmlFor='auth-register-password'>Mật khẩu</InputLabel>
               <OutlinedInput
                 label='Password'
                 value={values.password}
@@ -190,27 +195,51 @@ const RegisterPage = () => {
                 }
               />
             </FormControl>
+            <FormControl fullWidth sx={{ marginBottom: 4 }}>
+              <InputLabel htmlFor='auth-register-password'>Nhập lại mật khẩu</InputLabel>
+              <OutlinedInput
+                label='Password'
+                value={values.retypePassword}
+                id='auth-register--retype-password'
+                onChange={handleChange('retypePassword')}
+                type={values.showRetypePassword ? 'text' : 'password'}
+                endAdornment={
+                  <InputAdornment position='end'>
+                    <IconButton
+                      edge='end'
+                      onClick={handleClickShowRetypePassword}
+                      onMouseDown={handleMouseDownPassword}
+                      aria-label='toggle password visibility'
+                    >
+                      {values.showRetypePassword ? <EyeOutline fontSize='small' /> : <EyeOffOutline fontSize='small' />}
+                    </IconButton>
+                  </InputAdornment>
+                }
+              />
+            </FormControl>
+            <TextField fullWidth type='phone' label='Số điện thoại' sx={{ marginBottom: 4 }} />
+            <TextField fullWidth type='cccd' label='Căn cước công dân' />
             <FormControlLabel
               control={<Checkbox />}
               label={
                 <Fragment>
-                  <span>I agree to </span>
+                  <span>Tôi đồng ý với các </span>
                   <Link href='/' passHref>
-                    <LinkStyled onClick={e => e.preventDefault()}>privacy policy & terms</LinkStyled>
+                    <LinkStyled onClick={e => e.preventDefault()}>chính sách & điều khoản</LinkStyled>
                   </Link>
                 </Fragment>
               }
             />
             <Button fullWidth size='large' type='submit' variant='contained' sx={{ marginBottom: 7 }}>
-              Sign up
+              Đăng ký
             </Button>
             <Box sx={{ display: 'flex', alignItems: 'center', flexWrap: 'wrap', justifyContent: 'center' }}>
               <Typography variant='body2' sx={{ marginRight: 2 }}>
-                Already have an account?
+                Đã có tài khoản?
               </Typography>
               <Typography variant='body2'>
                 <Link passHref href='/pages/login'>
-                  <LinkStyled>Sign in</LinkStyled>
+                  <LinkStyled>Đăng nhập</LinkStyled>
                 </Link>
               </Typography>
             </Box>

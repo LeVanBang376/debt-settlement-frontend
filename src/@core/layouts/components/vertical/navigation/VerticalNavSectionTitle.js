@@ -15,6 +15,17 @@ const ListSubheader = styled(props => <MuiListSubheader component='li' {...props
   transition: 'padding-left .25s ease-in-out'
 }))
 
+const FirstListSubheader = styled(props => <MuiListSubheader component='li' {...props} />)(({ theme }) => ({
+  lineHeight: 1,
+  display: 'flex',
+  position: 'relative',
+  marginTop: 0,
+  marginBottom: theme.spacing(2),
+  paddingTop: '0 !important',
+  backgroundColor: 'transparent',
+  transition: 'padding-left .25s ease-in-out'
+}))
+
 const TypographyHeaderText = styled(Typography)(({ theme }) => ({
   fontSize: '0.75rem',
   lineHeight: 'normal',
@@ -31,7 +42,33 @@ const VerticalNavSectionTitle = props => {
   // ** Hook
   const theme = useTheme()
 
-  return (
+  return item.sectionTitle === 'Danh sách'? (
+    <FirstListSubheader
+      className='nav-section-title'
+      sx={{
+        px: 0,
+        py: 1.75,
+        color: theme.palette.text.disabled,
+        '& .MuiDivider-root:before, & .MuiDivider-root:after, & hr': {
+          borderColor: `rgba(${theme.palette.customColors.main}, 0.12)`
+        }
+      }}
+    >
+      <Divider
+        textAlign='left'
+        sx={{
+          m: 0,
+          width: '100%',
+          lineHeight: 'normal',
+          textTransform: 'uppercase',
+          '&:before, &:after': { top: 7, transform: 'none' },
+          '& .MuiDivider-wrapper': { px: 2.5, fontSize: '0.75rem', letterSpacing: '0.21px' }
+        }}
+      >
+        <TypographyHeaderText noWrap>{item.sectionTitle}</TypographyHeaderText>
+      </Divider>
+    </FirstListSubheader>
+  ) : (
     <ListSubheader
       className='nav-section-title'
       sx={{

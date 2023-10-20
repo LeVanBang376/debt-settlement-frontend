@@ -1,4 +1,3 @@
-// ** React Imports
 import { useState } from 'react'
 
 // ** Next Imports
@@ -57,11 +56,15 @@ const FormControlLabel = styled(MuiFormControlLabel)(({ theme }) => ({
   }
 }))
 
-const LoginPage = () => {
-  // ** State
+const ForgetPassword = () => {
   const [values, setValues] = useState({
+    email: '',
+    sentCode: false,
+    confirmedCode: false,
     password: '',
-    showPassword: false
+    retypePassword: '',
+    showPassword: false,
+    showRetypePassword: false
   })
 
   // ** Hook
@@ -72,8 +75,20 @@ const LoginPage = () => {
     setValues({ ...values, [prop]: event.target.value })
   }
 
+  const sendCode = () => {
+    setValues({ ...values, sentCode: true })
+  }
+
+  const confirmCode = () => {
+    setValues({ ...values, confirmedCode: true })
+  }
+
   const handleClickShowPassword = () => {
     setValues({ ...values, showPassword: !values.showPassword })
+  }
+
+  const handleClickShowRetypePassword = () => {
+    setValues({ ...values, showRetypePassword: !values.showRetypePassword })
   }
 
   const handleMouseDownPassword = event => {
@@ -157,95 +172,112 @@ const LoginPage = () => {
               {themeConfig.templateName}
             </Typography>
           </Box>
-          {/* <Box sx={{ mb: 6 }}>
-            <Typography variant='h5' sx={{ fontWeight: 600, marginBottom: 1.5 }}>
-              Welcome to {themeConfig.templateName}! 👋🏻
-            </Typography>
-            <Typography variant='body2'>Please sign-in to your account and start the adventure</Typography>
-          </Box> */}
-          <form noValidate autoComplete='off' onSubmit={e => e.preventDefault()}>
-            <TextField autoFocus fullWidth id='email' label='Email' sx={{ marginBottom: 4 }} />
-            <FormControl fullWidth>
-              <InputLabel htmlFor='auth-login-password'>Mật khẩu</InputLabel>
-              <OutlinedInput
-                label='Password'
-                value={values.password}
-                id='auth-login-password'
-                onChange={handleChange('password')}
-                type={values.showPassword ? 'text' : 'password'}
-                endAdornment={
-                  <InputAdornment position='end'>
-                    <IconButton
-                      edge='end'
-                      onClick={handleClickShowPassword}
-                      onMouseDown={handleMouseDownPassword}
-                      aria-label='toggle password visibility'
-                    >
-                      {values.showPassword ? <EyeOutline /> : <EyeOffOutline />}
-                    </IconButton>
-                  </InputAdornment>
-                }
+          {values.sentCode && !values.confirmedCode && (
+            <form noValidate autoComplete='off' onSubmit={e => e.preventDefault()}>
+              <TextField fullWidth id='email' label='Email' value={values.email} disabled sx={{ marginBottom: 4 }} />
+              <TextField autoFocus fullWidth id='code' label='Nhập mã' sx={{ marginBottom: 4 }} />
+              <Button fullWidth size='large' variant='contained' sx={{ marginBottom: 7 }} onClick={confirmCode}>
+                Xác nhận
+              </Button>
+              <Box sx={{ display: 'flex', alignItems: 'center', flexWrap: 'wrap', justifyContent: 'center' }}>
+                <Typography variant='body2'>
+                  <Link passHref href='/pages/login'>
+                    <LinkStyled>Trở lại đăng nhập</LinkStyled>
+                  </Link>
+                </Typography>
+              </Box>
+            </form>
+          )}
+          {!values.sentCode && !values.confirmedCode && (
+            <form noValidate autoComplete='off' onSubmit={e => e.preventDefault()}>
+              <TextField
+                autoFocus
+                fullWidth
+                id='email'
+                label='Email'
+                onChange={handleChange('email')}
+                sx={{ marginBottom: 4 }}
               />
-            </FormControl>
-            <Box
-              sx={{ mb: 4, display: 'flex', alignItems: 'center', flexWrap: 'wrap', justifyContent: 'space-between' }}
-            >
-              <FormControlLabel control={<Checkbox />} label='Nhớ mật khẩu' />
-              <Link passHref href='/pages/forget-password'>
-                <LinkStyled>Quên mật khẩu?</LinkStyled>
-              </Link>
-            </Box>
-            <Button
-              fullWidth
-              size='large'
-              variant='contained'
-              sx={{ marginBottom: 7 }}
-              onClick={() => router.push('/')}
-            >
-              Đăng nhập
-            </Button>
-            <Box sx={{ display: 'flex', alignItems: 'center', flexWrap: 'wrap', justifyContent: 'center' }}>
-              <Typography variant='body2' sx={{ marginRight: 2 }}>
-                Chưa có tài khoản?
-              </Typography>
-              <Typography variant='body2'>
-                <Link passHref href='/pages/register'>
-                  <LinkStyled>Tạo tài khoản</LinkStyled>
-                </Link>
-              </Typography>
-            </Box>
-            {/* <Divider sx={{ my: 5 }}>or</Divider>
-            <Box sx={{ display: 'flex', alignItems: 'center', justifyContent: 'center' }}>
-              <Link href='/' passHref>
-                <IconButton component='a' onClick={e => e.preventDefault()}>
-                  <Facebook sx={{ color: '#497ce2' }} />
-                </IconButton>
-              </Link>
-              <Link href='/' passHref>
-                <IconButton component='a' onClick={e => e.preventDefault()}>
-                  <Twitter sx={{ color: '#1da1f2' }} />
-                </IconButton>
-              </Link>
-              <Link href='/' passHref>
-                <IconButton component='a' onClick={e => e.preventDefault()}>
-                  <Github
-                    sx={{ color: theme => (theme.palette.mode === 'light' ? '#272727' : theme.palette.grey[300]) }}
-                  />
-                </IconButton>
-              </Link>
-              <Link href='/' passHref>
-                <IconButton component='a' onClick={e => e.preventDefault()}>
-                  <Google sx={{ color: '#db4437' }} />
-                </IconButton>
-              </Link>
-            </Box> */}
-          </form>
+              <Button fullWidth size='large' variant='contained' sx={{ marginBottom: 7 }} onClick={sendCode}>
+                Gửi mã
+              </Button>
+              <Box sx={{ display: 'flex', alignItems: 'center', flexWrap: 'wrap', justifyContent: 'center' }}>
+                <Typography variant='body2'>
+                  <Link passHref href='/pages/login'>
+                    <LinkStyled>Trở lại đăng nhập</LinkStyled>
+                  </Link>
+                </Typography>
+              </Box>
+            </form>
+          )}
+          {values.confirmedCode && (
+            <form noValidate autoComplete='off' onSubmit={e => e.preventDefault()}>
+              <FormControl fullWidth sx={{ marginBottom: 4 }}>
+                <InputLabel htmlFor='auth-register-password'>Mật khẩu mới</InputLabel>
+                <OutlinedInput
+                  label='Password'
+                  value={values.password}
+                  id='auth-register-password'
+                  onChange={handleChange('password')}
+                  type={values.showPassword ? 'text' : 'password'}
+                  endAdornment={
+                    <InputAdornment position='end'>
+                      <IconButton
+                        edge='end'
+                        onClick={handleClickShowPassword}
+                        onMouseDown={handleMouseDownPassword}
+                        aria-label='toggle password visibility'
+                      >
+                        {values.showPassword ? <EyeOutline fontSize='small' /> : <EyeOffOutline fontSize='small' />}
+                      </IconButton>
+                    </InputAdornment>
+                  }
+                />
+              </FormControl>
+              <FormControl fullWidth sx={{ marginBottom: 4 }}>
+                <InputLabel htmlFor='auth-register-password'>Nhập lại mật khẩu mới</InputLabel>
+                <OutlinedInput
+                  label='Password'
+                  value={values.retypePassword}
+                  id='auth-register--retype-password'
+                  onChange={handleChange('retypePassword')}
+                  type={values.showRetypePassword ? 'text' : 'password'}
+                  endAdornment={
+                    <InputAdornment position='end'>
+                      <IconButton
+                        edge='end'
+                        onClick={handleClickShowRetypePassword}
+                        onMouseDown={handleMouseDownPassword}
+                        aria-label='toggle password visibility'
+                      >
+                        {values.showRetypePassword ? (
+                          <EyeOutline fontSize='small' />
+                        ) : (
+                          <EyeOffOutline fontSize='small' />
+                        )}
+                      </IconButton>
+                    </InputAdornment>
+                  }
+                />
+              </FormControl>
+              <Button
+                fullWidth
+                size='large'
+                variant='contained'
+                sx={{ marginBottom: 7 }}
+                onClick={e => e.preventDefault()}
+              >
+                Xác nhận
+              </Button>
+            </form>
+          )}
         </CardContent>
       </Card>
       <FooterIllustrationsV1 />
     </Box>
   )
 }
-LoginPage.getLayout = page => <BlankLayout>{page}</BlankLayout>
 
-export default LoginPage
+ForgetPassword.getLayout = page => <BlankLayout>{page}</BlankLayout>
+
+export default ForgetPassword
