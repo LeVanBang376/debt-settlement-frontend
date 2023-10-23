@@ -1,0 +1,23 @@
+.cardContent {
+  padding: 20px;
+  .cardHeader {
+    font-size: 22px;
+    font-weight: bold;
+    margin-bottom: 12px;
+  }
+  .fieldContainer {
+    margin-right: 12px;
+    margin-bottom: 6px;
+    .field {
+      width: 180px;
+      font-weight: 600;
+      line-height: 1.5;
+      text-align: right;
+    }
+  }
+
+  .fieldValue {
+    line-height: 1.5;
+    margin-bottom: 6px;
+  }
+}

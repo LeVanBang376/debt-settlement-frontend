@@ -106,7 +106,7 @@ function GetStaffs() {
                       </TableCell>
                     ) : (
                       <TableCell key={column.id} align={column.align}>
-                        <Link href='/'>
+                        <Link href='/no-xau/chi-tiet'>
                           <a className={styles.linkStyle}>{value}</a>
                         </Link>
                       </TableCell>
@@ -131,7 +131,7 @@ function GetStaffs() {
   )
 }
 
-const NhanVien = () => {
+const NoXau = () => {
   return (
     <Grid>
       <Grid item xs={12}>
@@ -144,4 +144,4 @@ const NhanVien = () => {
   )
 }
 
-export default NhanVien
+export default NoXau
